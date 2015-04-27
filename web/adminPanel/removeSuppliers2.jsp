@@ -1,20 +1,19 @@
 <%-- 
-    Document   : removePage2
-    Created on : Mar 23, 2015, 5:30:38 PM
-    Author     : Chami
+    Document   : removeSuppliers2
+    Created on : Mar 25, 2015, 10:45:25 AM
+    Author     : Dushara Vitiyala
 --%>
 
-<%@page import="java.util.Calendar"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="style.css"/>
-        <link href="css/bootstrap.css" rel="stylesheet">
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/startPage.css" rel="stylesheet">
-        <link href="css/form.css" rel="stylesheet">
+        <link href="http://localhost:8080/BookStore/adminPanel/css/bootstrap.css" rel="stylesheet">
+        <link href="http://localhost:8080/BookStore/adminPanel/css/bootstrap.min.css" rel="stylesheet">
+        <link href="http://localhost:8080/BookStore/adminPanel/css/startPage.css" rel="stylesheet">
+        <link href="http://localhost:8080/BookStore/adminPanel/css/form.css" rel="stylesheet">
         <title>Admin Panel</title>
     </head>
     <body>
@@ -41,10 +40,10 @@
                     <a href="#"><img src="Images/Page icons/Home.png" class="image" width="100%" alt="Responsive image" title="Home"></a>
                 </div>
                 <div class="col-lg-1">
-                    <img src="Images/Page icons/Books.png" class="image" width="100%" alt="Responsive image" title="Books" style="opacity: 0.5">
+                    <a href="#"><img src="Images/Page icons/Books.png" class="image" width="100%" alt="Responsive image" title="Books"></a>
                 </div>
                 <div class="col-lg-1">
-                    <a href="#"><img src="Images/Page icons/Author.png" class="image" width="100%" alt="Responsive image" title="Authors"></a>
+                    <a href="addAuthors.jsp"><img src="Images/Page icons/Author.png" class="image" width="100%" alt="Responsive image" title="Authors"></a>
                 </div>
                 <div class="col-lg-1">
                     <a href="#"><img src="Images/Page icons/Clients.png" class="image" width="100%" alt="Responsive image" title="Clients"></a>
@@ -56,7 +55,7 @@
                     <a href="#"><img src="Images/Page icons/Stocks.png" class="image" width="100%" alt="Responsive image" title="Stocks"></a>
                 </div>
                 <div class="col-lg-1">
-                    <a href="#"><img src="Images/Page icons/Suppliers.png" class="image" width="100%" alt="Responsive image" title="Suppliers"></a>
+                    <a href="#"><img src="Images/Page icons/Suppliers.png" class="image" width="100%" alt="Responsive image" title="Suppliers" style="opacity: 0.4"></a>
                 </div>
                 <div class="col-lg-1">
                     <a href="#"><img src="Images/Page icons/Order.png" class="image" width="100%" alt="Responsive image" title="Orders"></a>
@@ -70,21 +69,21 @@
                 <%--left side navigation--%>
                 <div class="col-lg-2">
                     <ul class="nav nav-pills nav-stacked ">
-                        <li role="presentation" class="text_box" style="padding: 0px; text-align: left;">Books</li>
+                        <li role="presentation" class="text_box" style="padding: 0px; text-align: left; font-size: 4em;">Suppliers</li>
                         <li>
                             <div id="topmenu">
-                                <ul class="nav nav-pills nav-stacked topmenu">
-                                    <li role="presentation"><a href="#"><font style="color: orange">Add Book</font></a></li>
-                                    <li role="presentation"><a href="#"><font style="color: orange">Modify Book</font></a></li>
-                                    <li role="presentation" class="active" ><a href="#">Remove Book</a></li>
-                                </ul>
+                            <ul class="nav nav-pills nav-stacked topmenu">
+                                <li role="presentation"><a href="addAuppliers.jsp"><font style="color: orange">Add Supplier</font></a></li>
+                                <li role="presentation"><a href="modifySuppliers.jsp"><font style="color: orange">Modify Supplier</font></a></li>
+                                <li role="presentation" class="active"><a href="#">Remove Supplier</a></li>
+                            </ul>
                             </div>
                         </li>
                     </ul>  
                 </div>
                 <div class="col-lg-1">&nbsp;</div>
                 <%--left side navigation end--%>
-
+                
                 <%--Form--%>
                 <div class="col-lg-9">
                     <br>
@@ -92,61 +91,57 @@
                     <form>
                         <div id ="orange">
                             <div class="form-group orange">
-                                <label>Book Title</label>
-                                <input type="text" class="form-control" placeholder="Enter book title" required>
-                                <div class="help-block with-errors"></div>
+                                <label>Supplier Name</label>
+                                <input type="text" class="form-control" placeholder="Enter Supplier Name" name="removeSupplierName" required>
                             </div>
                         </div>
                         <div id ="orange">
                             <div class="form-group orange">
-                                <label>Author Name</label>
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <select class="form-control" placeholder="Select year" required >
-                                            <option>Author name</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <a class="btn btn-default" href="#" role="button">Add Authors</a>
-                                    </div>
-                                </div>                            
-                            </div>
-                        </div> 
-                        <div id ="orange">
-                            <div class="form-group orange">
-                                <label>Book Edition</label>
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <input type="text" class="form-control" placeholder="Enter book edition">
-                                    </div>
-                                </div>
+                                <label>Supplier Contact Number</label>
+                                <input type="text" class="form-control" placeholder="Enter Contact Number" name="removeSupplierContactNO" required>
                             </div>
                         </div>
-                        <div id ="orange">
+                        
+                                                <div id ="orange">
                             <div class="form-group orange">
-                                <label>Book Published Year</label>
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <select class="form-control" placeholder="Select year" >
-                                            <%  int year = Calendar.getInstance().get(Calendar.YEAR) - 1;
-                                                for (int i = year; i > (year - 200); i--) {%><option><%=i%></option><%}%>
-                                        </select>
-                                    </div>
-                                </div>                            
+                                <label>Supplier Email</label>
+                                <input type="email" class="form-control" placeholder="Enter Email" data-error="Email address is invalid" name="removeSupplierEmail" required>
                             </div>
-                        </div> 
-                        <div id ="orange">
+                        </div>
+                        
+                                                <div id ="orange">
                             <div class="form-group orange">
-                                <label>Book Image</label>
-                                <input type="file" style="border-color: orange">
-                            </div>  
-                        </div> 
-                        <button type="submit" class="btn btn-default">Remove Book</button>
+                                <label>Supplier Address</label>
+                                <input type="text" class="form-control" placeholder="Address Line 1" required>
+                                <input type="text" class="form-control" placeholder="Address Line 2">
+                                <input type="text" class="form-control" placeholder="Address Line 3">
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-default">Remove Supplier</button>
                     </form>
                 </div>
             </div>
             <%--Form end--%>
+   <div class="row">
+                &nbsp;
+            </div>
             <div class="row">
+                &nbsp;
+            </div>
+                <div class="row">
+                &nbsp;
+            </div>
+            <div class="row">
+                &nbsp;
+            </div>
+                <div class="row">
+                &nbsp;
+            </div>
+            <div class="row">
+                &nbsp;
+            </div>
+                <div class="row">
                 &nbsp;
             </div>
             <div class="row">

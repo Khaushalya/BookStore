@@ -8,16 +8,26 @@
 <!DOCTYPE html>
 <html>
     <head>
+<<<<<<< HEAD:web/adminPanel/removePage1.jsp
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+        <link href="http://localhost:8080/BookStore/adminPanel/css/bootstrap.css" rel="stylesheet">
+        <link href="http://localhost:8080/BookStore/adminPanel/css/bootstrap.min.css" rel="stylesheet">
+        <link href="http://localhost:8080/BookStore/adminPanel/css/startPage.css" rel="stylesheet">
+        <link href="http://localhost:8080/BookStore/adminPanel/css/form.css" rel="stylesheet">
+=======
        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="style.css"/>
         <link href="css/bootstrap.css" rel="stylesheet">
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/startPage.css" rel="stylesheet">
         <link href="css/form.css" rel="stylesheet">
+>>>>>>> chami1994-master:web/adminPanel/removeBook1.jsp
         <title>Admin Panel</title>
     </head>
     <body>
         <div class="container" style="background-color:#F5F5F0">
+<<<<<<< HEAD:web/adminPanel/removePage1.jsp
             <div class="row"><div class="col-md-10">&nbsp;</div></div>
             <div class="row">
                 <div class="col-md-11"></div>
@@ -65,6 +75,9 @@
                 <img src="Images/Orthers/orange line.png"width="100%" alt="Responsive image"">
             </div>
             <%-- end of sub menus--%>           
+=======
+            <%@include file="HeaderFiles/bookHeader.jsp"%>           
+>>>>>>> chami1994-master:web/adminPanel/removeBook1.jsp
             <div class="row">
                 <%--left side navigation--%>
                 <div class="col-lg-2" >
