@@ -5,16 +5,28 @@
  */
 package Classes;
 
+import com.mysql.jdbc.PreparedStatement;
+import com.mysql.jdbc.Statement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Indunil
  */
 public class MessagesClass {
+
     private int m_ID;
     private String u_Name;
     private String m_Date;
     private String m_Content;
     private int m_ReadState;
+
+    //DbClass object
+    private DbClass db = new DbClass();
 
     /**
      * @return the m_ID
@@ -85,5 +97,208 @@ public class MessagesClass {
     public void setM_ReadState(int m_ReadState) {
         this.m_ReadState = m_ReadState;
     }
-    
+
+    //methods
+    public int unreadedMessagesCount() {
+
+        int messages = 0;
+
+        try {
+            db.getConnection();
+
+            String query;
+            query = "SELECT COUNT(*) FROM messages WHERE u_Name='" + getU_Name() + "' AND m_ReadState = 0";
+
+            Statement stmt = (Statement) db.conn.createStatement();
+
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                messages = rs.getInt("COUNT(*)");
+            }
+            db.endConnection();
+
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            if (db.conn != null) {
+                db.endConnection();
+            }
+        }
+
+        return messages;
+    }
+
+    public int sendMsg() {
+        PreparedStatement pstmt;
+        DbClass db = new DbClass();
+        if (db.getConnection() == true) {
+            try {
+                pstmt = (PreparedStatement) db.conn.prepareStatement("Insert into messages(u_Name,m_Content) values(?,?)");
+                pstmt.setString(1, u_Name);
+                pstmt.setString(2, m_Content);
+
+                System.out.println(pstmt);
+                int inserted = pstmt.executeUpdate();
+                pstmt.close();
+                db.endConnection();
+
+                return inserted;
+            } catch (SQLException ex) {
+                Logger.getLogger(BookClass.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return -1;
+    }
+
+    public ArrayList unreadedMessages() throws SQLException {
+
+        ArrayList messages = new ArrayList();
+
+        try {
+            db.getConnection();
+
+            String query;
+            query = "SELECT * FROM messages WHERE u_name='" + getU_Name() + "' AND m_ReadState= 0";
+
+            Statement stmt = (Statement) db.conn.createStatement();
+
+            ResultSet rs = stmt.executeQuery(query);
+
+//            ResultSetMetaData metadata = rs.getMetaData();
+//            int numberOfColumns = metadata.getColumnCount();
+            while (rs.next()) {
+                MessagesClass x = new MessagesClass();
+                x.setM_ID(rs.getInt("m_ID"));
+                x.setU_Name(rs.getString("u_Name"));
+                x.setM_Date(rs.getString("m_Date"));
+                x.setM_Content(rs.getString("m_Content"));
+                x.setM_ReadState(rs.getInt("m_ReadState"));
+                messages.add(x);
+            }
+            db.endConnection();
+
+        } finally {
+            if (db.conn != null) {
+                db.endConnection();
+            }
+        }
+
+        return messages;
+    }
+
+    public ArrayList readeddMessages() throws SQLException {
+
+        ArrayList messages = new ArrayList();
+
+        try {
+            db.getConnection();
+
+            String query;
+            query = "SELECT * FROM messages WHERE u_name='" + getU_Name() + "' AND m_ReadState= 1 LIMIT 30";
+
+            Statement stmt = (Statement) db.conn.createStatement();
+
+            ResultSet rs = stmt.executeQuery(query);
+
+//            ResultSetMetaData metadata = rs.getMetaData();
+//            int numberOfColumns = metadata.getColumnCount();
+            while (rs.next()) {
+                MessagesClass x = new MessagesClass();
+                x.setM_ID(rs.getInt("m_ID"));
+                x.setU_Name(rs.getString("u_Name"));
+                x.setM_Date(rs.getString("m_Date"));
+                x.setM_Content(rs.getString("m_Content"));
+                x.setM_ReadState(rs.getInt("m_ReadState"));
+                messages.add(x);
+            }
+            db.endConnection();
+
+        } finally {
+            if (db.conn != null) {
+                db.endConnection();
+            }
+        }
+
+        return messages;
+    }
+
+    public boolean deleteMessage() throws SQLException {
+        boolean x = false;
+
+        try {
+            db.getConnection();
+
+            String query;
+            query = "DELETE from messages where m_ID='" + getM_ID() + "'";
+
+            Statement stmt = (Statement) db.conn.createStatement();
+            int res = stmt.executeUpdate(query);
+
+            if (res == 1) {
+                x = true;
+            } else {
+                x = false;
+            }
+        } finally {
+            if (db.conn != null) {
+                db.endConnection();
+            }
+        }
+
+        return x;
+    }
+
+    public boolean markAsRead() throws SQLException {
+        boolean x = false;
+
+        try {
+            db.getConnection();
+
+            String query;
+            query = "UPDATE messages SET m_ReadState=1 WHERE m_ID='" + getM_ID() + "'";
+
+            Statement stmt = (Statement) db.conn.createStatement();
+            int res = stmt.executeUpdate(query);
+
+            if (res == 1) {
+                x = true;
+            } else {
+                x = false;
+            }
+        } finally {
+            if (db.conn != null) {
+                db.endConnection();
+            }
+        }
+
+        return x;
+    }
+
+    public boolean markAsUnread() throws SQLException {
+        boolean x = false;
+
+        try {
+            db.getConnection();
+
+            String query;
+            query = "UPDATE messages SET m_ReadState=0 WHERE m_ID='" + getM_ID() + "'";
+
+            Statement stmt = (Statement) db.conn.createStatement();
+            int res = stmt.executeUpdate(query);
+
+            if (res == 1) {
+                x = true;
+            } else {
+                x = false;
+            }
+        } finally {
+            if (db.conn != null) {
+                db.endConnection();
+            }
+        }
+
+        return x;
+    }
+
 }

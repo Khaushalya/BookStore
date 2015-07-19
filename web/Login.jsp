@@ -4,6 +4,20 @@
     Author     : Indunil
 --%>
 
+<%
+
+    /*This Servlet Clears all Sessions & Cookies*/
+    //removing all sessions
+    session.invalidate();
+
+    //removing all cookies
+    Cookie[] cookies = request.getCookies();
+    for (Cookie cookie : cookies) {
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+    }
+%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>    
@@ -102,10 +116,11 @@
                     if (x !== "" || x !== null) {
                         document.getElementById('username').value = x;
                         sync();
-                        autoClick();
-                    }                    
+                    } else {
+                        return false;
+                    }
                     return false;
-                    
+
                 } else {
                     return true;
                 }
@@ -114,11 +129,14 @@
             function autoClick() {
                 document.forms('passRecover').submit();
             }
+
         </script>
 
         <!--internal JS end-->
     </head>
-    <body style="background-image: url(indunil_files/Resources/Graphics/clean-white-polygon-backgrounds-8.jpg); background-color: #B5B5B5;">	    
+    <body style="background-image: url(indunil_files/Resources/Graphics/clean-white-polygon-backgrounds-8.jpg); background-color: #B5B5B5;">
+
+        <jsp:include page='include_ShowErrorScript.jsp'></jsp:include>
 
         <div class="container" style="margin-top:40px;">
             <div class="row">

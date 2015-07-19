@@ -5,15 +5,10 @@
  */
 package Classes;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.awt.image.WritableRaster;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Files;
-import javax.imageio.ImageIO;
+import java.sql.Blob;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  *
@@ -21,39 +16,56 @@ import javax.imageio.ImageIO;
  */
 public class ImageExchange {
     
-    String url;
-    BufferedImage image;
-    FileInputStream inputFile;
-    
-    //create buffered image
-    public BufferedImage createImageFile() throws IOException{
-        BufferedImage bufferedImage = ImageIO.read(new File(this.url));
+    public byte[] getBytes(Blob img) throws SQLException {
         
-        return bufferedImage;
-    }
-    
-    //create file input stream
-    public FileInputStream inputFile() throws FileNotFoundException{
-        FileInputStream fis = new FileInputStream(new File(this.url));
-        
-        return fis;
-    }
-    
-    //method 1 for get byte array
-    public byte[] extractBytes() throws IOException {
-        // get DataBufferBytes from Raster
-        WritableRaster raster = this.image.getRaster();
-        DataBufferByte data = (DataBufferByte) raster.getDataBuffer();
+        byte[] imgData = null;
 
-        return (data.getData());
+        imgData = img.getBytes(1, (int) img.length());
+        
+        return imgData;
+    }
+
+    public byte[] bookImageBytes(String b_id) throws SQLException {
+
+        Blob img;
+        byte[] imgData = null;
+
+        DbClass db = new DbClass();
+
+        String sql = "Select b_image FROM book WHERE b_id='" + b_id + "' LIMIT 1";
+        
+        db.getConnection();
+        Statement stmt = db.conn.createStatement();
+        
+        ResultSet rs = stmt.executeQuery(sql);
+
+        while (rs.next()) {
+            img = rs.getBlob("b_image");
+            imgData = img.getBytes(1, (int) img.length());
+        }
+        db.endConnection();
+        return imgData;
     }
     
-    //method 2 for get byte array
-    public byte[] getbytes() throws IOException {
-        File file = new File(this.url);
+    public byte[] userImageBytes(String u_id) throws SQLException {
+
+        Blob img;
+        byte[] imgData = null;
+
+        DbClass db = new DbClass();
+
+        String sql = "Select u_image FROM user WHERE u_name='" + u_id + "' LIMIT 1";
         
-        byte[] fileContent = Files.readAllBytes(file.toPath());
+        db.getConnection();
+        Statement stmt = db.conn.createStatement();
         
-        return (fileContent);
+        ResultSet rs = stmt.executeQuery(sql);
+
+        while (rs.next()) {
+            img = rs.getBlob("u_image");
+            imgData = img.getBytes(1, (int) img.length());
+        }
+        db.endConnection();
+        return imgData;
     }
 }

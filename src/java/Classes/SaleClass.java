@@ -5,6 +5,15 @@
  */
 package Classes;
 
+import com.mysql.jdbc.PreparedStatement;
+import java.sql.Blob;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Indunil
@@ -17,6 +26,9 @@ public class SaleClass {
     private int u_ID;
     private int s_Qty;
     private int s_Amount;
+    private int b_ID;
+    private String b_Title;
+    private String State;
 
     /**
      * @return the s_ID
@@ -30,6 +42,22 @@ public class SaleClass {
      */
     public void setS_ID(int s_ID) {
         this.s_ID = s_ID;
+    }
+
+    public int getB_ID() {
+        return b_ID;
+    }
+
+    public void setB_ID(int b_ID) {
+        this.b_ID = b_ID;
+    }
+
+    public String getB_Title() {
+        return b_Title;
+    }
+
+    public void setB_Title(String b_Title) {
+        this.b_Title = b_Title;
     }
 
     /**
@@ -101,4 +129,104 @@ public class SaleClass {
     public void setS_Amount(int s_Amount) {
         this.s_Amount = s_Amount;
     }
+
+    public String getState() {
+        return State;
+    }
+
+    public void setState(String State) {
+        this.State = State;
+    }
+
+    public ArrayList Orders() throws SQLException {
+        ArrayList arrayList = new ArrayList();
+        DbClass db = new DbClass();
+        try {
+            db.getConnection();
+
+            String query;
+            query = "SELECT * FROM sale where State='Ordered' ORDER BY s_Date ";
+
+            com.mysql.jdbc.Statement stmt = (com.mysql.jdbc.Statement) db.conn.createStatement();
+
+            ResultSet rs = stmt.executeQuery(query);
+
+//            ResultSetMetaData metadata = rs.getMetaData();
+//            int numberOfColumns = metadata.getColumnCount();
+            while (rs.next()) {
+                SaleClass sale = new SaleClass();
+                BookClass book = new BookClass();
+                UserClass user = new UserClass();
+
+                sale.setS_Amount(rs.getInt("s_Amount"));
+                sale.setS_Date(rs.getString("s_Date").substring(0, 10));
+                sale.setS_ID(rs.getInt("s_ID"));
+                sale.setU_Name(rs.getString("u_Name"));
+                sale.setS_Qty(rs.getInt("s_Qty"));
+                sale.setB_ID(rs.getInt("b_ID"));
+
+                book.getBookName(rs.getInt("b_ID"));
+                sale.setB_Title(book.getB_Title());
+
+                arrayList.add(sale);
+            }
+
+            db.endConnection();
+        } catch (Exception ex) {
+
+        } finally {
+            if (db.conn != null) {
+                db.endConnection();
+            }
+        }
+
+        return arrayList;
+    }
+
+    public void shiftOrder(int orderID) {
+        PreparedStatement pstmt;
+        DbClass db = new DbClass();
+        if (db.getConnection() == true) {
+            try {
+                pstmt = (PreparedStatement) db.conn.prepareStatement("Update Sale set State='Dispatched' where S_ID=?");
+                pstmt.setInt(1, orderID);
+                System.out.println(pstmt);
+                int inserted = pstmt.executeUpdate();
+                pstmt.close();
+                db.endConnection();
+
+            } catch (SQLException ex) {
+                Logger.getLogger(BookClass.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public boolean addItem() throws SQLException {
+        boolean res = false;
+        DbClass db = new DbClass();
+        try {
+            db.getConnection();
+
+            String query;
+            query = "INSERT INTO Sale(u_Name,b_ID,s_Qty) Values('" + getU_Name() + "'," + getB_ID() + "," + getS_Qty() + ")";
+            Statement stmt = (Statement) db.conn.createStatement();
+
+            int x = stmt.executeUpdate(query);
+
+            if (x == 1) {
+                res = true;
+            } else {
+                res = false;
+            }
+
+            db.endConnection();
+        } finally {
+            if (db.conn != null) {
+                db.endConnection();
+            }
+        }
+
+        return res;
+    }
+
 }
